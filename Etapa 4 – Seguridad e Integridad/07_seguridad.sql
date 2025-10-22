@@ -22,18 +22,18 @@ USE Pedido_Envio;
 DROP TABLE IF EXISTS Pedido;
 DROP TABLE IF EXISTS Envio;
 
-CREATE TABLE Envio (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    eliminado BOOLEAN DEFAULT FALSE,
-    tracking VARCHAR(40) UNIQUE,
-    empresa ENUM('ANDREANI','OCA','CORREO_ARG'),
-    tipo ENUM('ESTANDAR','EXPRES'),
-    costo DECIMAL(10,2) CHECK (costo >= 0),
-    fechaDespacho DATE,
-    fechaEstimada DATE,
-    estado ENUM('EN_PREPARACION','EN_TRANSITO','ENTREGADO'),
-    PRIMARY KEY (id),
-    CHECK (fechaEstimada IS NULL OR fechaDespacho IS NULL OR fechaEstimada >= fechaDespacho)
+CREATE TABLE IF NOT EXISTS Envio (
+id BIGINT NOT NULL,
+eliminado BOOLEAN DEFAULT FALSE,
+tracking VARCHAR(40) UNIQUE,
+empresa ENUM('ANDREANI','OCA','CORREO_ARG'),
+tipo ENUM('ESTANDAR','EXPRES'),
+costo DECIMAL(10,2) CHECK (costo >= 0),
+fechaDespacho DATE,
+fechaEstimada DATE,
+estado ENUM('EN_PREPARACION','EN_TRANSITO','ENTREGADO'),
+PRIMARY KEY (id),
+CHECK (fechaEstimada IS NOT NULL AND fechaDespacho IS NOT NULL AND fechaEstimada >= fechaDespacho)
 );
 
 CREATE TABLE Pedido (
@@ -88,9 +88,36 @@ SELECT
 FROM Envio
 WHERE eliminado = FALSE;
 
+-- ============================================================
+--  3.1. INSERTS DE PRUEBA PARA VISTAS PÚBLICAS
+-- ============================================================
+-- Inserción de registros de prueba en Envio
+INSERT INTO Envio (id, tracking, empresa, tipo, costo, fechaDespacho, fechaEstimada, estado)
+VALUES 
+(1, 'TRK-001', 'OCA', 'ESTANDAR', 450.00, '2025-10-15', '2025-10-20', 'EN_TRANSITO'),
+(2, 'TRK-002', 'ANDREANI', 'EXPRES', 700.00, '2025-10-18', '2025-10-21', 'ENTREGADO'),
+(3, 'TRK-003', 'CORREO_ARG', 'ESTANDAR', 300.00, '2025-10-19', '2025-10-24', 'EN_PREPARACION');
+
+-- Inserción de registros de prueba en Pedido
+INSERT INTO Pedido (numero, fecha, clienteNombre, total, estado, envio)
+VALUES
+('PED-010', CURDATE(), 'Cliente A', 2500.00, 'NUEVO', 1),
+('PED-011', CURDATE(), 'Cliente B', 1800.00, 'FACTURADO', 2),
+('PED-012', CURDATE(), 'Cliente C', 3200.00, 'ENVIADO', 3);
+
 -- Prueba de vistas
 SELECT * FROM vista_pedidos_publica;
 SELECT * FROM vista_envios_publica;
+
+-- ============================================================
+--  3.2. LIMPIEZA DE DATOS DE PRUEBA (para continuar con integridad)
+-- ============================================================
+DELETE FROM Pedido;
+DELETE FROM Envio;
+
+-- Confirmación de limpieza
+SELECT COUNT(*) AS Pedidos_restantes FROM Pedido;
+SELECT COUNT(*) AS Envios_restantes FROM Envio;
 
 -- ============================================================
 --  4. PRUEBAS DE INTEGRIDAD (PK, FK, UNIQUE, CHECK)
