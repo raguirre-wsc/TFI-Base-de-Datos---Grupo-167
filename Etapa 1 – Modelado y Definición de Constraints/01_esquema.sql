@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS `Pedido_Envio`;
 
 CREATE TABLE Pedido (
-id BIGINT NOT NULL,
+id BIGINT NOT NULL AUTO_INCREMENT,
 eliminado BOOLEAN DEFAULT FALSE,
 numero VARCHAR(20) NOT NULL UNIQUE,
 fecha DATE DEFAULT (CURRENT_DATE) NOT NULL, -- en caso de no especificar fecha, se ingresa la fecha actual por defecto y no queda nulo
