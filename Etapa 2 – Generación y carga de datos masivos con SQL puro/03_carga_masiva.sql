@@ -35,9 +35,9 @@ SELECT
     CONCAT('PED-', LPAD(n, 9, '0')) AS numero,
     DATE_ADD('2020-01-01', INTERVAL FLOOR(RAND() * 2190) DAY) AS fecha,
     CONCAT(
-        ELT(FLOOR(1 + RAND()*10), 'Juan','María','Pedro','Laura','Andrés','Lucía','Sofía','Carlos','Julieta','Diego'),
+        ELT(FLOOR(1 + RAND()*10), 'Juan','Maria','Pedro','Laura','Andres','Lucia','Sofia','Carlos','Julieta','Diego'),
         ' ',
-        ELT(FLOOR(1 + RAND()*10), 'García','Pérez','Rodríguez','López','Fernández','Gómez','Torres','Romero','Díaz','Sánchez')
+        ELT(FLOOR(1 + RAND()*10), 'Garcia','Perez','Rodriguez','Lopez','Fernandez','Gomez','Torres','Romero','Diaz','Sanchez')
     ) AS clienteNombre,
     ROUND(1 + RAND() * 10000000, 2) AS total,
     ELT(FLOOR(1 + RAND()*3), 'NUEVO','FACTURADO','ENVIADO') AS estado,
@@ -45,8 +45,7 @@ SELECT
 FROM seed_numeros
 WHERE n BETWEEN 1 AND 500000;
 
--- volvemos a activar el check de foreign key
-SET foreign_key_checks = 1;
+
 
 -- contamos los registros
 SELECT COUNT(*) FROM Pedido;
@@ -83,3 +82,6 @@ FROM base;
 
 -- contamos registros
 SELECT COUNT(*) FROM Envio;
+
+-- volvemos a activar el check de foreign key
+SET foreign_key_checks = 1;
