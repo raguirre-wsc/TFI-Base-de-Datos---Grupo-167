@@ -1,5 +1,6 @@
 
 CREATE DATABASE IF NOT EXISTS `Pedido_Envio`;
+USE `Pedido_Envio`;
 
 CREATE TABLE IF NOT EXISTS Envio (
 id BIGINT NOT NULL,
