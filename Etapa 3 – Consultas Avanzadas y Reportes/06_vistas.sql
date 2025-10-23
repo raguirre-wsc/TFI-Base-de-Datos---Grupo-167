@@ -1,5 +1,4 @@
 CREATE VIEW IF NOT EXISTS vista_situacion_pedidos AS
-
 SELECT 
     p.numero AS numero_pedido,
     p.fecha AS fecha_pedido,
